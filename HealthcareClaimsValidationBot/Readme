@@ -1,1 +1,190 @@
+# 🏥 Healthcare Claims Validation Bot  
+### End-to-End Automation Using UiPath Document Understanding, Regex Extraction, Business Rules & Action Center  
+**Author:** Ranga Swamy Reddy (Ranga Kappeta)
+
+---
+
+## 📌 Project Overview
+
+In the healthcare domain, validating claim PDFs is a repetitive and error-prone activity.  
+Many claims contain missing fields, invalid NPI numbers, incorrect ICD-10 codes, mismatched totals, or inconsistent service dates.  
+
+To replicate a real-world healthcare automation scenario, I built this **Healthcare Claims Validation Bot** using:
+
+- **UiPath Document Understanding (DU)**  
+- **Regex Extractor**  
+- **Custom business rule validation engine**  
+- **Action Center (Human-in-the-loop)**  
+- **Excel automation**
+
+The goal of this bot is to:
+1. Automatically extract claim data from PDF files  
+2. Validate fields using strict healthcare business rules  
+3. Separate valid vs invalid claims  
+4. Automatically send invalid claims to **UiPath Action Center**  
+5. Allow a human to review & approve/fix the claim  
+6. Produce clean output files for downstream processing  
+
+This project demonstrates how an RPA Engineer uses DU + business rules + Action Center to build intelligent automations.
+
+---
+
+## 🎯 Project Objectives (My Focus Areas)
+
+### ✔ Build a real-time DU extraction workflow  
+### ✔ Implement strict validation rules like a healthcare backend system  
+### ✔ Integrate Action Center for human review  
+### ✔ Produce clean audit files for compliance teams  
+### ✔ Understand the full lifecycle: PDFs → Extraction → Validation → Human Review → Excel Output  
+
+This project helped me practice how real enterprise healthcare automation works.
+
+---
+
+# 🧠 **Key Features (Explained in My Point of View)**
+
+## 1️⃣ Document Understanding Pipeline
+
+I designed a complete DU flow:
+Digitize Document → Load Taxonomy → Data Extraction Scope → Regex Based Extractor
+
+### DU handles:
+- Claim ID  
+- Member ID  
+- Patient Name  
+- Provider Name  
+- Provider NPI  
+- Service Dates  
+- CPT/HCPCS Code  
+- ICD-10 Code  
+- Units  
+- Line Amount  
+- Total Amount  
+
+The extraction is driven by a custom **Taxonomy.json** (included in repo).
+
+### Why DU?
+Because healthcare PDFs come in different formats.  
+DU + Regex gives accurate, structured extraction even from scanned PDFs.
+
+---
+
+## 2️⃣ Business Rule Validation Engine
+
+After extraction, I created a validation block that applies healthcare rules such as:
+
+### ✔ NPI Format Check  
+Must be exactly 10 digits
+
+### ✔ ICD-10 Format Check  
+[A-Z][0-9][0-9][A-Z0-9]{0,4}
+
+### ✔ Required Field Check  
+- Claim ID  
+- Member ID  
+- Provider NPI  
+- Total Amount  
+- Service Dates  
+
+### ✔ Date Range Check  
+ServiceDateFrom ≤ ServiceDateTo
+
+### ✔ Amount Check  
+Sum of line-level charges must equal header TotalChargeAmount.
+
+### ✔ Error Aggregation  
+If any rule fails → all messages are collected into `ErrorMessages`.
+
+This creates an audit trail that healthcare payers and compliance teams expect.
+
+---
+
+## 3️⃣ Action Center Human Review
+
+For every invalid claim:
+
+- A **Form Task** is created
+- The form automatically displays:
+  - Claim ID (read-only)
+  - Error Messages (read-only)
+  - Provider NPI
+  - Resolution (Approve / Fix & Resubmit / Reject)
+  - Reviewer Comments
+
+### Why Action Center?  
+Healthcare claims require **human review** when rules fail.  
+Rather than rejecting automatically, I give the reviewer a chance to approve or correct.
+
+---
+
+## 4️⃣ Excel Output Generation
+
+The bot produces two files:
+Output/
+│── ValidClaims.xlsx → Clean, validated claims
+│── ErrorClaims.xlsx → Invalid claims before human review
+These files give a clear comparison of:
+
+- What passed
+- What failed
+- Why it failed (detailed error messages)
+
+---
+
+# 🏗️ Workflow Logic (Step-by-Step)
+
+### 1. Load Config.xlsx  
+Reads input/output folder paths.
+
+### 2. Load Taxonomy.json  
+Defines claim structure for DU.
+
+### 3. Loop through PDFs  
+Each file is processed one by one.
+
+### 4. Extract Data using DU  
+Header + Line items extracted with Regex.
+
+### 5. Validate data  
+If valid → add to dtValid  
+If invalid → add to dtError + create Action Center task
+
+### 6. Generate Excel outputs  
+Using Workbook Write Range (stable & fast).
+
+### 7. Action Center Step  
+Human reviews the invalid claim.
+
+### 8. End of workflow  
+Bot finishes cleanly.
+
+---
+
+# 🧪 How to Run the Project
+
+1. Clone the repository  
+2. Open solution in UiPath Studio  
+3. Update paths in Config.xlsx  
+4. Place test claim PDFs into `/Input` folder  
+5. Run **Main.xaml**  
+
+---
+
+# 🔮 Future Enhancements (My Plan)
+
+- Add ML-based metadata classification  
+- Use Intelligent Keyword Classifier  
+- Push lookup validation from SQL database  
+- Integrate with FHIR/HL7  
+- Build dashboards in Power BI  
+- Add automatic claim fixing suggestions  
+
+---
+
+# 👤 About Me  
+**Ranga Swamy Reddy (Ranga Kappeta)**  
+RPA Developer | UiPath | Automation Anywhere | Intelligent Automation  
+Passionate about building real-world healthcare automation solutions using DU + Action Center.
+
+
 
