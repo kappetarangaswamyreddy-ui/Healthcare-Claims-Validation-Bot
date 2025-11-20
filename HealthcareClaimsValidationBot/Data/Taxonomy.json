@@ -1,0 +1,101 @@
+{
+  "name": "Healthcare Claims Taxonomy",
+  "version": "1.0",
+  "description": "Taxonomy for Document Understanding in Healthcare Claim PDFs",
+  "document_types": [
+    {
+      "id": "claim_form",
+      "name": "Healthcare Claim Form",
+      "fields": [
+        {
+          "id": "ClaimID",
+          "name": "Claim ID",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "MemberID",
+          "name": "Member ID",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "PatientName",
+          "name": "Patient Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "ProviderName",
+          "name": "Provider Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "ProviderNPI",
+          "name": "Provider NPI",
+          "type": "text",
+          "required": true,
+          "validation": {
+            "regex": "^[0-9]{10}$",
+            "error_message": "Provider NPI must be 10 digits"
+          }
+        },
+        {
+          "id": "ServiceDateFrom",
+          "name": "Service Date From",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "ServiceDateTo",
+          "name": "Service Date To",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "TotalChargeAmount",
+          "name": "Total Charge Amount",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "tables": [
+        {
+          "id": "LineItems",
+          "name": "Claim Line Items",
+          "columns": [
+            {
+              "id": "CPTCode",
+              "name": "CPT/HCPCS Code",
+              "type": "text",
+              "required": true
+            },
+            {
+              "id": "ICD10Code",
+              "name": "ICD-10 Diagnosis Code",
+              "type": "text",
+              "required": true,
+              "validation": {
+                "regex": "^[A-TV-Z][0-9][0-9A-Z](\\.[0-9A-Z]{1,4})?$",
+                "error_message": "Invalid ICD-10 Code Format"
+              }
+            },
+            {
+              "id": "Units",
+              "name": "Units",
+              "type": "number",
+              "required": true
+            },
+            {
+              "id": "LineAmount",
+              "name": "Line Amount",
+              "type": "number",
+              "required": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

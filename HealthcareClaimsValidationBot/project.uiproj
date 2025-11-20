@@ -1,0 +1,6 @@
+{
+  "Name": "HealthcareClaimsValidationBot",
+  "ProjectType": "Process",
+  "Description": "Automated Document Understanding & validation of healthcare claim PDFs using business rules.",
+  "MainFile": "Main.xaml"
+}
